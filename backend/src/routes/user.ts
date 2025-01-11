@@ -32,7 +32,7 @@ userRouter.post('/signin', async (c) => {
     const result = signinInput.safeParse(body);
 
     if (!result.success) {
-        return c.status(StatusCode.ClientErrorBadRequest);
+        c.status(StatusCode.ClientErrorBadRequest);
         return c.json({
             msg: "incorrect inputs were passed in the body"
         })
