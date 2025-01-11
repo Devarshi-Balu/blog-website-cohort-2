@@ -42,7 +42,7 @@ userRouter.post('/signin', async (c) => {
         c.status(400);
 
         return c.json({
-            msg: "user not found sign up in the sign up route"
+            msg: "user not found , sign up in the sign up route"
         });
     }
 

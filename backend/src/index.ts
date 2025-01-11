@@ -13,6 +13,7 @@ const app = new Hono<{
     useremail: string
   }
 }>();
+
 app.use(cors());
 
 app.get('/', (c) => {

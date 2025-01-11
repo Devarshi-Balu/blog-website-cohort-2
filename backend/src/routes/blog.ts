@@ -2,6 +2,9 @@ import { Hono } from "hono";
 import { blogMiddleware } from "../middlewares/blog";
 import { PrismaClient } from "@prisma/client/edge"
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { updatePostInput, createPostInput } from "@devarshi-balu/blog-website-common";
+import { StatusCode } from "status-code-enum"
+
 
 const blogRouter = new Hono<{
     Bindings: {
@@ -26,13 +29,21 @@ blogRouter.post('/', async (c) => {
     const userId: string = c.get('userId');
 
     const body = await c.req.json();
-    // zod validation of library here
+
+    const result = createPostInput.safeParse(body);
+
+    if (!result.success) {
+        c.status(StatusCode.ClientErrorBadRequest);
+        return c.json({
+            msg: "Incorrect inputs were passed in the pody"
+        })
+    }
 
     try {
         const post = await prisma.post.create({
             data: {
-                title: body.title as string,
-                content: body.content as string,
+                title: result.data.title,
+                content: result.data.content,
                 authorId: userId
             }
         });
@@ -42,7 +53,7 @@ blogRouter.post('/', async (c) => {
             postId: post.id
         });
     } catch (err: unknown) {
-        c.status(400);
+        c.status(StatusCode.ClientErrorNotAcceptable);
         return c.json({
             msg: "Erorr in creating the post"
         })
@@ -55,20 +66,28 @@ blogRouter.put('/', async (c) => {
     }).$extends(withAccelerate());
 
     const userId = c.get('userId');
+
     const body = await c.req.json();
+
+    const result = updatePostInput.safeParse(body);
+
+    if (!result.success) {
+        c.status(StatusCode.ClientErrorBadRequest);
+        return c.json({
+            msg: "Incorrect inputs were passed in the pody"
+        })
+    }
 
     // some zod validation here - updating the blog 
     try {
         const post = await prisma.post.update({
             where: {
-                id: body.id,
+                id: result.data.id,
                 authorId: userId,
             },
-            data: {
-                title: body.title,
-                content: body.content
-            }
+            data: result.data
         });
+
         return c.json({
             msg: "Updated the blog",
             post
@@ -92,6 +111,7 @@ blogRouter.get('/bulk', async (c) => {
         select: {
             title: true,
             content: true,
+            id: true,
             author: {
                 select: {
                     email: true,
@@ -109,18 +129,19 @@ blogRouter.get('/bulk', async (c) => {
 });
 
 blogRouter.get('/:id', async (c) => {
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
 
     const id = c.req.param('id');
 
-    const userId = c.get('userId');
+    // const userId = c.get('userId');
 
     try {
         const post = await prisma.post.findUnique({
             where: {
-                authorId: userId,
+                // authorId: userId,
                 id: id
             },
             select: {
@@ -139,7 +160,7 @@ blogRouter.get('/:id', async (c) => {
         }
 
         return c.json({
-            msg: "no post found with the given id from the author"
+            msg: "no post found with the given id"
         });
     } catch (err) {
         return c.json({

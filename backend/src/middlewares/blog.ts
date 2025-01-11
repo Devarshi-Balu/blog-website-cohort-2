@@ -1,9 +1,6 @@
 import { Context, Hono } from "hono"
 import { sign, decode, verify } from "hono/jwt"
 
-
-
-
 async function blogMiddleware(c: Context, next: () => Promise<void>) {
     const authHeader: string | undefined = c.req.header('Authorization');
 
