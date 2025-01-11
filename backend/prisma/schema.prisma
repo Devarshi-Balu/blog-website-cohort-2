@@ -19,6 +19,7 @@ model User {
   name     String?
   password String
   posts    Post[]
+  Token    Token[]
 }
 
 model Post {
@@ -28,4 +29,12 @@ model Post {
   published Boolean @default(false)
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+}
+
+model Token {
+  id         Int     @id @default(autoincrement())
+  token_name String
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+  useremail  String?
 }

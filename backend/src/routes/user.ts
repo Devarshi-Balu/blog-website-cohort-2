@@ -2,6 +2,9 @@ import { Hono } from "hono";
 import { getPrisma } from "../db/db";
 import { sign, decode, verify } from "hono/jwt"
 
+import { PrismaClient } from "@prisma/client/edge"
+import { withAccelerate } from "@prisma/extension-accelerate";
+
 
 const userRouter = new Hono<{
     Bindings: {
@@ -9,20 +12,63 @@ const userRouter = new Hono<{
         jwt_secret: string
     },
     variables: {
-
+        userId: string,
+        message: string,
+        msg: string
     }
 }>();
 
 userRouter.post('/signin', async (c) => {
-    const prisma = getPrisma(c.env.DATABASE_URL);
 
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
 
-    return c.text("user/signin");
+    const body = await c.req.json();
+    // do some zod validation here
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email: body.email,
+            password: body.password
+        },
+        select: {
+            email: true,
+            id: true,
+        }
+    });
+
+    if (!user) {
+        c.status(400);
+
+        return c.json({
+            msg: "user not found sign up in the sign up route"
+        });
+    }
+
+    const token: string = await sign({
+        userId: user.id
+    }, c.env.jwt_secret);
+
+    await prisma.token.create({
+        data: {
+            userId: user.id,
+            token_name: token,
+        }
+    });
+
+    return c.json({
+        msg: "signed in succesfully",
+        token
+    });
+
 })
 
 
 userRouter.post('/signup', async (c) => {
-    const prisma = getPrisma(c.env.DATABASE_URL);
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
 
     const body = await c.req.json();
     // zod validation here 
@@ -31,6 +77,16 @@ userRouter.post('/signup', async (c) => {
     const userExisting = await prisma.user.findUnique({
         where: {
             email: body.email
+        },
+        select: {
+            email: true,
+            id: true,
+            Token: {
+                select: {
+                    token_name: true,
+                    useremail: true
+                }
+            }
         }
     });
 
@@ -48,10 +104,11 @@ userRouter.post('/signup', async (c) => {
 
         await prisma.token.create({
             data: {
-                token,
-                userId: user.id
+                token_name: token,
+                userId: user.id,
+                useremail: user.email
             }
-        })
+        });
 
         c.status(200);
 
@@ -66,10 +123,11 @@ userRouter.post('/signup', async (c) => {
 
     c.status(411);
     c.redirect('/signin');
+
     return c.json({
-        msg: "there is alredy an existing user with the given email, you can login"
+        msg: "there is alredy an existing user with the given email, you can login",
+        userExisting
     });
 });
-
 
 export default userRouter;
