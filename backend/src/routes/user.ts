@@ -4,6 +4,8 @@ import { sign, decode, verify } from "hono/jwt"
 
 import { PrismaClient } from "@prisma/client/edge"
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { signupInput, signinInput } from "@devarshi-balu/blog-website-common";
+import StatusCode from "status-code-enum";
 
 
 const userRouter = new Hono<{
@@ -27,10 +29,19 @@ userRouter.post('/signin', async (c) => {
     const body = await c.req.json();
     // do some zod validation here
 
+    const result = signinInput.safeParse(body);
+
+    if (!result.success) {
+        return c.status(StatusCode.ClientErrorBadRequest);
+        return c.json({
+            msg: "incorrect inputs were passed in the body"
+        })
+    }
+
     const user = await prisma.user.findUnique({
         where: {
-            email: body.email,
-            password: body.password
+            email: result.data.email,
+            password: result.data.password
         },
         select: {
             email: true,
@@ -71,12 +82,22 @@ userRouter.post('/signup', async (c) => {
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+
     // zod validation here 
+
+    const result = signupInput.safeParse(body);
+
+    if (!result.success) {
+        c.status(StatusCode.ClientErrorBadRequest);
+        return c.json({
+            msg: "incorrect inputs were sent"
+        });
+    }
 
     // existing user ? 
     const userExisting = await prisma.user.findUnique({
         where: {
-            email: body.email
+            email: result.data.email
         },
         select: {
             email: true,
@@ -93,8 +114,8 @@ userRouter.post('/signup', async (c) => {
     if (!userExisting) {
         const user = await prisma.user.create({
             data: {
-                email: body.email,
-                password: body.password
+                email: result.data.email,
+                password: result.data.password
             }
         });
 
@@ -122,7 +143,7 @@ userRouter.post('/signup', async (c) => {
     // or tell them that there is alredy an existing user with the provided details
 
     c.status(411);
-    c.redirect('/signin');
+    // c.redirect('/signin');
 
     return c.json({
         msg: "there is alredy an existing user with the given email, you can login",

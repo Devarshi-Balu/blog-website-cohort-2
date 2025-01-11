@@ -1,0 +1,17 @@
+{
+  "name": "@devarshi-balu/blog-website-common",
+  "version": "1.0.2",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "devarshi-balu",
+  "license": "ISC",
+  "description": "minor improvements with the empty strings in the zod types",
+  "dependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
+  }
+}
