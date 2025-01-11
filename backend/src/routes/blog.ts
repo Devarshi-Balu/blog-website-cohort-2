@@ -55,8 +55,8 @@ blogRouter.put('/', async (c) => {
     }).$extends(withAccelerate());
 
     const userId = c.get('userId');
-
     const body = await c.req.json();
+
     // some zod validation here - updating the blog 
     try {
         const post = await prisma.post.update({
@@ -77,7 +77,7 @@ blogRouter.put('/', async (c) => {
         c.status(400);
         return c.json({
             msg: "error while updating the blog, perhaps the id is not provied",
-            err: (err as Error).message
+            err: JSON.stringify(err)
         })
     }
 });
@@ -88,7 +88,6 @@ blogRouter.get('/bulk', async (c) => {
     }).$extends(withAccelerate());
 
     const posts = prisma.post.findMany({
-        where: {},
         select: {
             title: true,
             content: true,
@@ -120,7 +119,7 @@ blogRouter.get('/:id', async (c) => {
     try {
         const post = await prisma.post.findUnique({
             where: {
-                // authorId: userId,
+                authorId: userId,
                 id: id
             },
             select: {
