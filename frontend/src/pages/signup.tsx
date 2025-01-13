@@ -56,13 +56,14 @@ export default function Signup() {
             });
 
             console.log(res.data);
+            localStorage.setItem("medium-token", res.data.token);
+            navigate('/blogs');
         } catch (err: any) {
             console.log(err.response.data);
             navigate('/signin', {
                 state: {
                     ...user
                 },
-                key: "redirect from the signup route"
             });
         }
     }

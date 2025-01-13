@@ -8,10 +8,11 @@ import { useImmer } from 'use-immer'
 import { signinInput } from "@devarshi-balu/blog-website-common";
 import { userBackend } from "../axios/backend";
 import { AxiosError } from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Signin() {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const initialState: signinInput = { email: "", password: "" };
 
@@ -51,6 +52,8 @@ export default function Signin() {
             });
             console.dir(res.data);
             setUser((draft) => (initialState));
+            localStorage.setItem("medium-token", res.data.token);
+            navigate('/blogs');
         } catch (err: any) {
             console.dir(err.response.data.msg);
         }

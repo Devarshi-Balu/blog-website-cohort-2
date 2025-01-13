@@ -1,14 +1,17 @@
+// this file is just used for the component checking purposes 
 
-import Navbar from '../components/Navbar.tsx'
+import Blogs from './blogs.tsx';
+
 interface props {
     username?: string
 }
 
 
 const Test: React.FC<React.PropsWithChildren<props>> = () => {
+
     return (
         <div>
-            <Navbar />
+            <Blogs />
         </div>
     )
 }
