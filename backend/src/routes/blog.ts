@@ -159,10 +159,12 @@ blogRouter.get('/:id', async (c) => {
             });
         }
 
+        c.status(400);
         return c.json({
             msg: "no post found with the given id"
         });
     } catch (err) {
+        c.status(400);
         return c.json({
             msg: "error while fetching the post"
         });
