@@ -5,13 +5,11 @@ import Button from "../components/Button"
 import SideBox from "../components/SideBox";
 import React from "react";
 import { useImmer } from 'use-immer'
-import { signinInput, signupInput } from "@devarshi-balu/blog-website-common";
+import { signupInput } from "@devarshi-balu/blog-website-common";
 import { userBackend } from "../axios/backend";
-import { useNavigate, useSearchParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-    const [searchParams, setSearchParams] = useSearchParams();
 
     const navigate = useNavigate();
 
@@ -54,7 +52,6 @@ export default function Signup() {
                 method: "post",
                 data: user
             });
-
             console.log(res.data);
             localStorage.setItem("medium-token", res.data.token);
             navigate('/blogs');
