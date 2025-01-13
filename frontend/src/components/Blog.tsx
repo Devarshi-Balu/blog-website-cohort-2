@@ -1,5 +1,4 @@
 import Heading from "./Heading";
-import SubHeading from "./SubHeading";
 
 
 interface props {
@@ -10,7 +9,7 @@ interface props {
 }
 
 
-const Blog: React.FC<props> = ({ title, content, publishedDate = "29 Jan 2025", className }) => {
+const Blog: React.FC<props> = ({ title, content }) => {
     return (
         <div className="flex flex-col items-start justify-start">
             <div className="font-sans">

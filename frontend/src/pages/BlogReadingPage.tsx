@@ -1,16 +1,15 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { blogBackend } from '../axios/backend.ts';
 import Author from '../components/Author.tsx';
 import Navbar from '../components/Navbar.tsx'
-import Blog from '../components/blog.tsx';
-import { atom, selector, selectorFamily, useRecoilValueLoadable } from "recoil"
+import Blog from '../components/Blog.tsx';
+import { selectorFamily, useRecoilValueLoadable } from "recoil"
 
 interface props {
     username?: string
 }
 
 const BlogReading: React.FC<React.PropsWithChildren<props>> = () => {
-    const navigate = useNavigate();
     const location = useLocation();
 
     const id: string = useParams().id || "";
@@ -56,7 +55,7 @@ export default BlogReading;
 
 const blogSelector = selectorFamily({
     key: "blogFetchByIdSelectorFamily",
-    get: (id: string) => async ({ get }) => {
+    get: (id: string) => async () => {
         try {
             const res = await blogBackend({
                 url: `/${id}`,

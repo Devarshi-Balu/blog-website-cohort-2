@@ -1,4 +1,3 @@
-import React from "react"
 import Heading from "../components/Heading";
 import SubHeading from "../components/SubHeading";
 import InputBox from "../components/InputBox"
@@ -7,7 +6,6 @@ import SideBox from "../components/SideBox";
 import { useImmer } from 'use-immer'
 import { signinInput } from "@devarshi-balu/blog-website-common";
 import { userBackend } from "../axios/backend";
-import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Signin() {
@@ -51,7 +49,7 @@ export default function Signin() {
                 data: user
             });
             console.dir(res.data);
-            setUser((draft) => (initialState));
+            setUser(() => (initialState));
             localStorage.setItem("medium-token", res.data.token);
             navigate('/blogs');
         } catch (err: any) {

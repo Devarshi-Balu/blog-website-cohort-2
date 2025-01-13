@@ -1,10 +1,7 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Signin from './pages/signin'
 import Signup from './pages/signup'
 import Blogs from './pages/blogs'
-import BlogWriting from './components/BlogWriting'
-import SideBox from './components/SideBox'
 import BlogReading from "./pages/BlogReadingPage"
 import Test from './pages/test'
 import { RecoilRoot } from 'recoil'

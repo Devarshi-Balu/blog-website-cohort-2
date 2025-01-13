@@ -1,14 +1,13 @@
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import docker from "../assets/docker.png"
 import Navbar from '../components/Navbar';
-import { atom, selector, useRecoilValueLoadable, RecoilRoot } from 'recoil';
+import { atom, selector, useRecoilValueLoadable } from 'recoil';
 import { blogBackend } from '../axios/backend';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 
 export default function Blogs() {
-    const params = useParams();
     const blogsLoadable: any = useRecoilValueLoadable(blogsAtom);
 
     let blogs;
@@ -117,7 +116,7 @@ const blogsAtom = atom({
     key: "BlogsAtomAsyncFetch",
     default: selector({
         key: "blogsAtomSelectorAsyncFecth",
-        get: async ({ get }) => {
+        get: async ({ }) => {
             try {
                 const res = await blogBackend({
                     url: '/bulk',
