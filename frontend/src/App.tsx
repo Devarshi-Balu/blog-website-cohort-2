@@ -6,6 +6,7 @@ import BlogReading from "./pages/BlogReadingPage"
 import Test from './pages/test'
 import { RecoilRoot } from 'recoil'
 import Home from "./pages/Home.tsx";
+import BlogWritingPage from './pages/blogwritingpage.tsx'
 
 
 
@@ -25,7 +26,7 @@ function App() {
               <Route path="/blog/:id" element={<BlogReading />} />
               <Route path='/test' element={<Test />} />
               <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blog/write/:id" element={< BlogReading />} />
+              <Route path="/blog/write/:id" element={< BlogWritingPage />} />
             </Routes>
           </RecoilRoot>
         </BrowserRouter>

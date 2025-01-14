@@ -1,8 +1,11 @@
 import mediumLogo from "../assets/medium-logo.png"
 import { useNavigate } from "react-router-dom";
 
-
-const Navbar: React.FC = () => {
+interface props {
+    isWriting: boolean,
+    onPublishClick?: () => void,
+}
+const Navbar: React.FC<props> = ({ isWriting, onPublishClick }) => {
     const navigate = useNavigate();
 
     return (
@@ -15,7 +18,8 @@ const Navbar: React.FC = () => {
                 </div>
                 <div className="flex gap-4 mr-4 justify-between items-center">
                     <div className="flex flex-col justify-center">
-                        <button type="button" className="text-white bg-[#1A8917]/90 focus:outline-none focus:ring-2 focus:ring-green-300 font-medium rounded-full text-sm px-4 h-max py-2  flex justify-center items-center  hover:bg-[#1a8917] ">publish</button>
+                        {isWriting ? <button onClick={onPublishClick} type="button" className="text-white bg-[#1A8917]/90 focus:outline-none focus:ring-2 focus:ring-green-300 font-medium rounded-full text-sm px-4 h-max py-2  flex justify-center items-center  hover:bg-[#1a8917] ">publish</button> :
+                            <button onClick={handleOnClickWriteNew} type="button" className="text-white bg-[#1A8917]/90 focus:outline-none focus:ring-2 focus:ring-green-300 font-medium rounded-full text-sm px-4 h-max py-2  flex justify-center items-center  hover:bg-[#1a8917] ">Write New</button>}
                     </div>
                     <div className="font-bold text-slate-700 flex flex-col justify-center ">
                         <button className="h-max w-max hover:scale-110">
@@ -45,6 +49,9 @@ const Navbar: React.FC = () => {
 
     function handleUserIconClickNavbar() {
         navigate('/blogs');
+    }
+    function handleOnClickWriteNew() {
+        navigate('/blog/write/newBlog');
     }
 }
 

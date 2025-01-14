@@ -30,7 +30,7 @@ export default function Blogs() {
 
     return (
         <div>
-            <div className="mb-8"><Navbar /></div>
+            <div className="mb-8"><Navbar isWriting={false} /></div>
             <div className='w-[60%] mx-auto'>
                 <div>
                     {blogs}

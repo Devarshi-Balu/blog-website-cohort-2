@@ -40,7 +40,7 @@ const BlogReading: React.FC<React.PropsWithChildren<props>> = () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar isWriting={false} />
             <div className='h-9/10 grid grid-cols-8 pl-20'>
                 <div className="col-span-6">
                     {blog}
