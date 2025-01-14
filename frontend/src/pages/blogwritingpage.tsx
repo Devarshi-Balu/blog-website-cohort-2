@@ -29,33 +29,40 @@ const BlogWritingPage: React.FC<React.PropsWithChildren<props>> = () => {
 
     async function onPublishClick() {
         try {
-            const res = await blogBackend({
-                url: "",
-                method: "post",
-                data: {
-                    title,
-                    content,
-                },
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("medium-token")
-                }
-            });
+            try {
+                console.log(title, content);
 
-            setTitle("");
-            setContent("");
-            navigate(`/blog/${res.data.postId}`, {
-                state: {
-                    state: "redirect-from-blogs",
-                    contents: {
-                        title: title,
-                        content: content,
-                        id: res.data.postId,
+                const res = await blogBackend({
+                    url: "",
+                    method: "post",
+                    data: {
+                        title,
+                        content,
+                    },
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("medium-token")
                     }
-                }
-            });
-            alert("published succesfully");
+                });
+
+                setTitle("");
+                setContent("");
+                navigate(`/blog/${res.data.postId}`, {
+                    state: {
+                        state: "redirect-from-blogs",
+                        contents: {
+                            title: title,
+                            content: content,
+                            id: res.data.postId,
+                        }
+                    }
+                });
+                alert("published succesfully");
+            } catch (err: any) {
+                console.log('error from backend : ', err.response.data.msg);
+            }
 
         } catch (err) {
+            // this catch blog is catch any erorr when the response of axios erorr fails by any chance
             console.log("error in publishing the blog");
         }
     }

@@ -35,3 +35,5 @@ export const updatePostInput = z.object({
 });
 
 export type updatePostInput = z.infer<typeof updatePostInput>
+
+

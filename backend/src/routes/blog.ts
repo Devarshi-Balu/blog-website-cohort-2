@@ -31,6 +31,7 @@ blogRouter.post('/', async (c) => {
     const body = await c.req.json();
 
     const result = createPostInput.safeParse(body);
+    console.log(result);
 
     if (!result.success) {
         c.status(StatusCode.ClientErrorBadRequest);

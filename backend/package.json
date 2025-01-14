@@ -5,7 +5,7 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "@devarshi-balu/blog-website-common": "^1.0.3",
+    "@devarshi-balu/blog-website-common": "^1.0.4",
     "@hono/node-server": "^1.13.7",
     "@prisma/extension-accelerate": "^1.2.1",
     "@types/node": "^22.10.5",
