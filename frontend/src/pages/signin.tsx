@@ -33,7 +33,7 @@ export default function Signin() {
                 <div className="flex flex-col justify-center">
                     <div className="h-max">
                         <SideBox mainContent='The customer support I recieved was exceptional. The support team went above and beyond to address
-                    my concerns' authorName='Devarshi Balu' authorDetails={`CEO, Acme Inc`} />
+                    my concerns' authorName='Theresa Simpson' authorDetails={`SDE, Perspective Inc`} />
                     </div>
                 </div>
             </div>
